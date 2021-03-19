@@ -29,6 +29,8 @@ public class ControlPanel : MonoBehaviour
 
         scripts.Add(player);
         scripts.Add(FindObjectOfType<CameraController>());
+
+        LoadFromPlayerPreferences();
     }
 
     // Update is called once per frame
@@ -52,6 +54,8 @@ public class ControlPanel : MonoBehaviour
         playerData.playerPosition = player.transform.position;
         playerData.playerRotation = player.transform.rotation;
         playerData.playerHealth = player.health;
+
+        SaveToPlayerPreferences();
     }
 
     public void onPauseButtonToggle()
@@ -68,5 +72,41 @@ public class ControlPanel : MonoBehaviour
         {
             script.enabled = !isGamePaused;
         }
+    }
+
+
+    public void OnApplicationQuit()
+    {
+        SaveToPlayerPreferences();
+    }
+
+    public void LoadFromPlayerPreferences()
+    {
+        playerData.playerPosition.x = PlayerPrefs.GetFloat("playerPositionX");
+        playerData.playerPosition.y = PlayerPrefs.GetFloat("playerPositionY");
+        playerData.playerPosition.z = PlayerPrefs.GetFloat("playerPositionZ");
+
+        playerData.playerRotation.x = PlayerPrefs.GetFloat("playerRotationX");
+        playerData.playerRotation.y = PlayerPrefs.GetFloat("playerRotationY");
+        playerData.playerRotation.z = PlayerPrefs.GetFloat("playerRotationZ");
+        playerData.playerRotation.w = PlayerPrefs.GetFloat("playerRotationW");
+
+        playerData.playerHealth = PlayerPrefs.GetInt("playerHealth");
+    }
+
+    public void SaveToPlayerPreferences()
+    {
+        PlayerPrefs.SetFloat("playerPositionX", playerData.playerPosition.x);
+        PlayerPrefs.SetFloat("playerPositionY", playerData.playerPosition.y);
+        PlayerPrefs.SetFloat("playerPositionZ", playerData.playerPosition.z);
+
+        PlayerPrefs.SetFloat("playerRotationX", playerData.playerRotation.x);
+        PlayerPrefs.SetFloat("playerRotationY", playerData.playerRotation.y);
+        PlayerPrefs.SetFloat("playerRotationZ", playerData.playerRotation.z);
+        PlayerPrefs.SetFloat("playerRotationW", playerData.playerRotation.w);
+
+        PlayerPrefs.SetInt("playerHealth", playerData.playerHealth);
+
+        PlayerPrefs.Save();
     }
 }
